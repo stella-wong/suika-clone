@@ -4,6 +4,7 @@ import Phaser from 'phaser';
 class GameScene extends Phaser.Scene {
   preload () {
     this.load.image('peppermint', '/assets/peppermint.png');
+    this.load.image('gumdrop', '/assets/gumdrop.png');
     this.load.image('boxBG', '/assets/box-bg.png');
   }
 
@@ -39,9 +40,22 @@ class GameScene extends Phaser.Scene {
       { isStatic: true }
     );
 
+
+    // game object options
+    const objectOptions = [
+      'peppermint',
+      'gumdrop'
+    ];
+
+    // spawn object on click
     boxBG.on('pointerdown', (pointer) => {
-      const peppermint = this.matter.add.image(pointer.x, pointer.y, 'peppermint');
-      peppermint.setScale(0.5);
+      const object = this.matter.add.image(
+        pointer.x,
+        0,
+        objectOptions[Math.floor(Math.random() * objectOptions.length)]
+      );
+      object.setCircle();
+      object.setScale(0.5);
     });
   }
 }
