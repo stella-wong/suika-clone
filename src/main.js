@@ -3,8 +3,11 @@ import Phaser from 'phaser';
 
 class GameScene extends Phaser.Scene {
   preload () {
-    this.load.image('peppermint', '/assets/peppermint.png');
     this.load.image('gumdrop', '/assets/gumdrop.png');
+    this.load.image('bell', '/assets/bell.png');
+    this.load.image('gingerbread', '/assets/gingerbread.png');
+    this.load.image('ornament', '/assets/ornament.png');
+    this.load.image('peppermint', '/assets/peppermint.png');
     this.load.image('boxBG', '/assets/box-bg.png');
   }
 
@@ -43,8 +46,10 @@ class GameScene extends Phaser.Scene {
 
     // game object options
     const objectOptions = [
-      'peppermint',
-      'gumdrop'
+      'gumdrop',
+      'bell',
+      'gingerbread',
+      'ornament',
     ];
 
     // spawn object on click
