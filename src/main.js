@@ -28,12 +28,12 @@ class GameScene extends Phaser.Scene {
 
   create () {
     const boxBG = this.add.image(400, 300, 'boxBG').setScale(0.5).setInteractive();
-
+    const bounds = boxBG.getBounds();
     const wallThickness = 22;
 
     // left wall
     this.matter.add.rectangle(
-      boxBG.getBounds().left - wallThickness / 2,
+      bounds.left - wallThickness / 2,
       300,
       wallThickness,
       600,
@@ -42,7 +42,7 @@ class GameScene extends Phaser.Scene {
 
     // right wall
     this.matter.add.rectangle(
-      boxBG.getBounds().right + wallThickness / 2,
+      bounds.right + wallThickness / 2,
       300,
       wallThickness,
       600,
@@ -52,7 +52,7 @@ class GameScene extends Phaser.Scene {
     // floor
     this.matter.add.rectangle(
       400,
-      boxBG.getBounds().bottom + wallThickness / 2,
+      bounds.bottom + wallThickness / 2,
       800,
       wallThickness,
       { isStatic: true }
@@ -60,11 +60,17 @@ class GameScene extends Phaser.Scene {
 
     // initial current object, show at top of box
     let currObject = getRandomObject();
-    const currPreview = this.add.image(boxBG.getBounds().right / 2, 0, currObject);
+    const currPreview = this.add.image(bounds.centerX, 0, currObject);
     currPreview.setScale(0.5);
+    // follow cursor
+    this.input.on('pointermove', (pointer) => {
+      const newX = Phaser.Math.Clamp(pointer.x, bounds.left, bounds.right);
+      currPreview.setPosition(newX, 0);
+    });
+
     // initial next object, show at top right
     let nextObject = getRandomObject();
-    const nextPreview = this.add.image(boxBG.getBounds().right, 0, nextObject);
+    const nextPreview = this.add.image(bounds.right + 100, 0, nextObject);
     nextPreview.setScale(0.5);
 
     // spawn current object on click
@@ -101,8 +107,8 @@ class GameScene extends Phaser.Scene {
 
         if (typeA == typeB) {
           const mergeResult = mergePattern[typeA];
-          const x = (objectA.x + objectB.x) / 2;
-          const y = (objectA.y + objectB.y) / 2;
+          const x = Math.min(objectA.x, objectB.x);
+          const y = Math.max(objectA.y, objectB.y);
 
           objectA.destroy();
           objectB.destroy();
